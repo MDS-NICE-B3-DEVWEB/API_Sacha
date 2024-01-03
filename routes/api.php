@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\PostController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ApiAuthController;
 /*
 |--------------------------------------------------------------------------
@@ -13,24 +15,24 @@ use App\Http\Controllers\Auth\ApiAuthController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// Route pour le login
-Route::group(['middleware' => ['cors', 'json.response']], function () {
+//crée un lien qui permettra aux clients: React, vue, angular, node, js, native
+//récupérer la liste des pièces de théâtre
+Route::get('theatre', [PostController::class,'index']);
 
-    // ...
+//inscrire un utilisateur
+Route::post('/login',[UserController::class,'login']);
+Route::post('/register', [UserController::class, 'register']);
 
-    // public routes
-    Route::post('/login', [ApiAuthController::class, 'login']);
-    Route::post('/register', [ApiAuthController::class, 'register'])->name('register.api');
-    Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
-
-    // ...
-
+Route::middleware('auth:sanctum')->group(function(){
+    //ajouter une pièce de théâtre /POST /PUT /PATCH
+    Route::post('theatre/create',[PostController::class,'store']);
+    //modifier une pièce de théâtre /PUT /PATCH
+    Route::put('theatre/edit/{theatre}', [PostController::class,'update']);
+    //supprimer une pièce de théâtre /DELETE
+    Route::delete('theatre/delete/{theatre}',[PostController::class,'destroy']); 
+    //retourner l'utilisateur actuellement connecté
+    Route::get('/user', function (Request $request) {
+        return $request->user();
 });
-Route::middleware('auth:api')->group(function () {
-    // our routes to be protected will go in here
-    Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
+ 
 });
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-

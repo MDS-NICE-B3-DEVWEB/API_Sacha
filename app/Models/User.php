@@ -42,4 +42,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function sendPasswordResetNotification($token)
+{
+    $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
+}
 }
