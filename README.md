@@ -11,7 +11,7 @@
 
 ## Informations générales
 - Nom du projet : API_SACHA
-- Date du projet : 17/01/2024
+- Date du projet : 06/01/2024
 - Résumé : Création d'une API REST sur Laravel pour avoir des informations détaillé sur les pièces qui se joue à Nice.
 
 ## Objectifs de l'API REST
