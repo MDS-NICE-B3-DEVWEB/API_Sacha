@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\LogUserRequest;
+use App\Http\Requests\CreatePostRequest;
+use Exception;
 class UserController extends Controller
 {
     public function register(RegisterUser $request)
@@ -49,4 +51,70 @@ if(auth()->attempt($request->only('email','password'))){
         ]);
     } 
     }
+    public function logout(Request $request){
+        try{
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                'status_code' => 200,
+            'status_message'=>'Utilisateur déconnecté',
+            ]);
+        }
+        catch(Exception $e){
+            return response()->json($e);
+        }
+        
+    }
+
+    public function destroy(Request $request)
+    {
+        try {
+            $user = User::findOrFail($request->id);
+            $user->delete();
+    
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'L\'utilisateur a été supprimé',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'Une erreur est survenue lors de la suppression de l\'utilisateur : ' . $e->getMessage(),
+            ]);
+        }
+    }
+
+
+public function update(Request $request, User $user)
+{
+    try {
+        if($user->id != auth()->user()->id){
+            return response()->json([
+                'status_code' => 403,
+                'status_message'=>'Vous n\'êtes pas autorisé à modifier cet utilisateur',
+            ]);
+        }
+
+        $user->name = $request->get('name', $user->name);
+        $user->email = $request->get('email', $user->email);
+        // Add more fields here as needed
+
+        $user->save();
+
+        return response()->json([
+            'status_code' => 200,
+            'status_message'=>'L\'utilisateur a été modifié',
+            'data'=>$user
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status_code' => 500,
+            'status_message' => 'Une erreur est survenue lors de la modification de l\'utilisateur : ' . $e->getMessage(),
+        ]);
+    }
 }
+}
+        // handle exception
+
+
+
+

@@ -46,7 +46,7 @@ class PostController extends Controller
             $theatre->save();
     return response()->json([
         'status_code' => 200,
-    'status_message'=>'Le post a été ajouté',
+    'status_message'=>'La pièce a été ajouté',
     'data'=>$theatre]);
         }
         catch(Exception $e){return response()->json($e);}
@@ -80,13 +80,13 @@ catch(Exception $e){return response()->json($e);}
             else{
                 return response()->json([
                     'status_code' => 403,
-                'status_message'=>'Vous n\'êtes pas autorisé à modifier ce post',
+                'status_message'=>'Vous n\'êtes pas autorisé à modifier cette pièce de théâtre',
                 ]);
             }
             $theatre->delete();
             return response()->json([
                 'status_code' => 200,
-            'status_message'=>'Le post a été supprimé',
+            'status_message'=>'La pièce a été supprimé',
             'data'=>$theatre]);
         }
         catch(Exception $e){

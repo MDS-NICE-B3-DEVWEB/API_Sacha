@@ -9,21 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('theatres', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('theatres');
-        });
-    }
+    public function up()
+{
+    Schema::create('comments', function (Blueprint $table) {
+        $table->integer('note');
+        $table->longtext('commentaire')->nullable();
+        $table->string('theatre_nom');
+    });
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('theatres', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+        Schema::table('comments', function (Blueprint $table) {
+            $table->dropColumn('');
         });
     }
 };

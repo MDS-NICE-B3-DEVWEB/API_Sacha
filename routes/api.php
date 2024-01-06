@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ApiAuthController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +25,9 @@ Route::get('theatre', [PostController::class,'index']);
 Route::post('/login',[UserController::class,'login']);
 Route::post('/register', [UserController::class, 'register']);
 
+Route::delete('/delete/{id}', [UserController::class, 'destroy']);
+Route::put('/update/{id}', [UserController::class, 'update']);
+Route::post('/comments', [CommentController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function(){
     //ajouter une pièce de théâtre /POST /PUT /PATCH
     Route::post('theatre/create',[PostController::class,'store']);
