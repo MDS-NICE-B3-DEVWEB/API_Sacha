@@ -69,11 +69,12 @@ Rien à écrire
 - Ajouter un pièce : 
 ``` POST    theatre/create ```
 à écrire sur le fichier json:
+```
 {
 "titre"= "titre de la pièce"
 "description"="la description"
 }
-
+```
 - Editer un pièce : 
 ``` PUT     theatre/edit/{id} ```
 à écrire sur le fichier json:
