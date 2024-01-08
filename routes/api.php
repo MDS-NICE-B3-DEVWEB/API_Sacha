@@ -19,7 +19,7 @@ use App\Http\Controllers\CommentController;
 */
 //crée un lien qui permettra aux clients: React, vue, angular, node, js, native
 //récupérer la liste des pièces de théâtre
-Route::get('theatre', [PostController::class,'index']);
+Route::get('/theatre', [PostController::class,'index']);
 
 //inscrire un utilisateur
 Route::post('/login',[UserController::class,'login']);
@@ -29,6 +29,7 @@ Route::delete('/delete/{id}', [UserController::class, 'destroy']);
 Route::put('/update/{id}', [UserController::class, 'update']);
 Route::post('/comments', [CommentController::class, 'store']);
 Route::middleware('auth:sanctum')->group(function(){
+    Route::get('theatre', [PostController::class,'index']);
     //ajouter une pièce de théâtre /POST /PUT /PATCH
     Route::post('theatre/create',[PostController::class,'store']);
     //modifier une pièce de théâtre /PUT /PATCH

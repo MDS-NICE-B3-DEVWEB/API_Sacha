@@ -25,7 +25,6 @@ class CommentController extends Controller
             $comments->note = $request->note;
             $comments->commentaire = $request->commentaire;
             $comments->theatre_titre = $request->theatre_titre;
-            $comments->user_id = auth()->user()->id;
             $comments->save();
     return response()->json([
         'status_code' => 200,

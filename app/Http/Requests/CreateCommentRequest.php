@@ -16,6 +16,7 @@ class CreateCommentRequest extends FormRequest
     public function rules()
     {
         return [
+            'note' => 'required|integer|min:0|max:5',
             'commentaire' => 'required',
             'theatre_titre.required' => 'required',
             
@@ -33,6 +34,7 @@ class CreateCommentRequest extends FormRequest
     }
     public function messages(){
         return [
+            'note.required' => 'Note obligatoire',
             'commentaire.required' => 'Commentaire obligatoire',
             'theatre_titre.required' => 'Titre obligatoire',
         ];
