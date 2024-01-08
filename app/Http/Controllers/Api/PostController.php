@@ -80,7 +80,7 @@ catch(Exception $e){return response()->json($e);}
             else{
                 return response()->json([
                     'status_code' => 403,
-                'status_message'=>'Vous n\'êtes pas autorisé à modifier cette pièce de théâtre',
+                'status_message'=>'Vous n\'êtes pas autorisé à supprimer cette pièce de théâtre',
                 ]);
             }
             $theatre->delete();

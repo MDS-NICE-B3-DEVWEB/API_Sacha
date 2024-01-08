@@ -20,11 +20,11 @@ use App\Http\Controllers\CommentController;
 //crée un lien qui permettra aux clients: React, vue, angular, node, js, native
 //récupérer la liste des pièces de théâtre
 Route::get('/theatre', [PostController::class,'index']);
-
+//2|xyv1FZzEuEhx7Iltnr3XHKum5hkgcyMisTcAIsjx0103cbbc
 //inscrire un utilisateur
 Route::post('/login',[UserController::class,'login']);
 Route::post('/register', [UserController::class, 'register']);
-
+Route::post('/logout', [UserController::class, 'logout']);
 Route::delete('/delete/{id}', [UserController::class, 'destroy']);
 Route::put('/update/{id}', [UserController::class, 'update']);
 Route::post('/comments', [CommentController::class, 'store']);

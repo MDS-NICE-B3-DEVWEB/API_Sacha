@@ -53,7 +53,10 @@ if(auth()->attempt($request->only('email','password'))){
     }
     public function logout(Request $request){
         try{
-            $request->user()->currentAccessToken()->delete();
+            if ($request->user()) {
+                // Révoquez le token
+                $request->user()->currentAccessToken()->delete();
+            }
             return response()->json([
                 'status_code' => 200,
             'status_message'=>'Utilisateur déconnecté',
@@ -69,6 +72,11 @@ if(auth()->attempt($request->only('email','password'))){
     {
         try {
             $user = User::findOrFail($request->id);
+            if($user->id != auth()->user()->id){
+                return response()->json([
+                    'status_code' => 403,
+                    'status_message'=>'Vous n\'êtes pas autorisé à modifier cet utilisateur',
+                ]);}
             $user->delete();
     
             return response()->json([
