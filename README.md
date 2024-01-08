@@ -105,8 +105,8 @@ Connecte un utilisateur:
 à écrire sur le fichier json:
 {
 "name"="nom"
-"email"="votre email"
-"password" = "votre mot de passe"
+"email"="votre email qui doit être existant"
+"password" = "votre mot de passe de 6 charactères minimum"
 }
 
 Inscrit un utilisateur:
