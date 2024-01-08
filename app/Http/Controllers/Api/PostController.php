@@ -57,7 +57,7 @@ class PostController extends Controller
 try{
     $theatre->titre = $request->titre;
     $theatre->description = $request->description;
-    if($theatre->user_id != auth()->user()->id){
+    if($theatre->user_id == auth()->user()->id){
         $theatre->save();}
     else{
         return response()->json([
@@ -75,7 +75,7 @@ catch(Exception $e){return response()->json($e);}
     }
     public function destroy(Theatre $theatre){
         try{
-            if($theatre->user_id != auth()->user()->id){
+            if($theatre->user_id == auth()->user()->id){
                 $theatre->delete();}
             else{
                 return response()->json([
