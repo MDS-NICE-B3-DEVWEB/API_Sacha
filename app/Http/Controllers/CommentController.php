@@ -24,7 +24,7 @@ class CommentController extends Controller
             $comments= new Comment();
             $comments->note = $request->note;
             $comments->commentaire = $request->commentaire;
-            $comments->theatre_titre = $request->theatre_titre;
+            $comments->theatre_nom = $request->theatre_nom;
             $comments->save();
     return response()->json([
         'status_code' => 200,
@@ -34,6 +34,5 @@ class CommentController extends Controller
         catch(\Exception $e){return response()->json($e);}
        
     }
-    
     
 }

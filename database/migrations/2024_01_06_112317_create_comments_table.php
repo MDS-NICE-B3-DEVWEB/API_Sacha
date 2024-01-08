@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->integer('note');
             $table->longtext('commentaire')->nullable();
-            $table->foreignId('theatre_titre')->references("nom")->on('theatre');
-            $table->foreignId('user_id')->references("id")->on('users');
+            $table->string('theatre_nom');
             $table->timestamps();
+            
+
         });
     }
 

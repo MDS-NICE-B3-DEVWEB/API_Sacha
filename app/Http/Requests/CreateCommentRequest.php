@@ -18,7 +18,7 @@ class CreateCommentRequest extends FormRequest
         return [
             'note' => 'required|integer|min:0|max:5',
             'commentaire' => 'required',
-            'theatre_titre.required' => 'required',
+            'theatre_nom.required' => 'required',
             
         ];
     }
@@ -36,7 +36,7 @@ class CreateCommentRequest extends FormRequest
         return [
             'note.required' => 'Note obligatoire',
             'commentaire.required' => 'Commentaire obligatoire',
-            'theatre_titre.required' => 'Titre obligatoire',
+            'theatre_nom.required' => 'Titre obligatoire',
         ];
     } 
 }
