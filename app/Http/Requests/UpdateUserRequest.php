@@ -25,7 +25,8 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'id' => 'required|exists:users',
-            'name' => 'sometimes|required|string|max:255',
+            'nom' => 'sometimes|required|string|max:255',
+            'prenom' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $this->id,
             'password' => 'sometimes|required|string|min:6|confirmed',
         ];

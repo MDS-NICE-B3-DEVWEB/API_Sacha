@@ -30,7 +30,8 @@ class RegisterUser extends FormRequest
     {
 
                 return [
-                    'name' => 'required|string|max:255',
+                    'nom' => 'required|string|max:255',
+                    'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             
@@ -62,7 +63,8 @@ class RegisterUser extends FormRequest
     public function messages()
     {
         return[
-            'name.required'=>'Le nom est obligatoire',
+            'nom.required'=>'Le nom est obligatoire',
+            'prenom.required'=>'Le prenom est obligatoire',
             'email.required'=>'Adresse mail obligatoire',
             'email.unique'=>'Adresse mail déjà utilisée',
             'password.required'=>'Mot de passe obligatoire',

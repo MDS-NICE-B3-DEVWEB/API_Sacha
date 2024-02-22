@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Utilisateurs;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterUser;
 use App\Models\User;
+// Remove the conflicting import statement
+// use App\Models\Utilisateurs;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\LogUserRequest;
+use App\Http\Requests\DeleteUserRequest;    
 use App\Http\Requests\CreatePostRequest;
 use Exception;
 class UserController extends Controller
@@ -16,8 +20,9 @@ class UserController extends Controller
     public function register(RegisterUser $request)
     {
         try{
-            $user=new User();
-        $user->name=$request->name;
+            $user=new Utilisateurs();
+        $user->nom=$request->nom;
+        $user->prenom=$request->prenom;
         $user->email=$request->email;
         $user->password=Hash::make($request->password);
         $user->type = 1; // Remplacez 'default_value' par la valeur que vous voulez
@@ -33,6 +38,10 @@ class UserController extends Controller
         }
         
     }
+
+    public function user(Request $request){
+        return response()->json($request->user());
+    }
     public function login(LogUserRequest $request){
 if(auth()->attempt($request->only('email','password'))){
     $user=auth()->user();
@@ -40,7 +49,7 @@ if(auth()->attempt($request->only('email','password'))){
     return response()->json([
         'status_code' => 200,
         'status_message'=>'Utilisateur connecté',
-        'user'=>$user,
+        'utilisateurs'=>$user,
         'token'=>$token
     ]);}
     else{
@@ -53,9 +62,9 @@ if(auth()->attempt($request->only('email','password'))){
     }
     public function logout(Request $request){
         try{
-            if ($request->user()) {
+            if ($request->utilisateurs()) {
                 // Révoquez le token
-                $request->user()->currentAccessToken()->delete();
+                $request->utilisateurs()->currentAccessToken()->delete();
             }
             return response()->json([
                 'status_code' => 200,
@@ -72,10 +81,10 @@ if(auth()->attempt($request->only('email','password'))){
     {
         try {
             $user = User::findOrFail($request->id);
-            if($user->id != auth()->user()->id){
+            if($user->id != auth()->utilisateurs()->id){
                 return response()->json([
                     'status_code' => 403,
-                    'status_message'=>'Vous n\'êtes pas autorisé à modifier cet utilisateur',
+                    'status_message'=>'Vous n\'êtes pas autorisé à supprimer cet utilisateur',
                 ]);}
             $user->delete();
     
@@ -92,17 +101,18 @@ if(auth()->attempt($request->only('email','password'))){
     }
 
 
-public function update(Request $request, User $user)
+public function update(Request $request, Utilisateurs $user)
 {
     try {
-        if($user->id != auth()->user()->id){
+        if($user->id != auth()->utilisateur()->id){
             return response()->json([
                 'status_code' => 403,
                 'status_message'=>'Vous n\'êtes pas autorisé à modifier cet utilisateur',
             ]);
         }
 
-        $user->name = $request->get('name', $user->name);
+        $user->nom = $request->get('nom', $user->nom);
+        $user->prenom = $request->get('prenom', $user->prenom);
         $user->email = $request->get('email', $user->email);
         // Add more fields here as needed
 
