@@ -25,7 +25,7 @@ class UserController extends Controller
         $user->prenom=$request->prenom;
         $user->email=$request->email;
         $user->password=Hash::make($request->password);
-        $user->type = 1; // Remplacez 'default_value' par la valeur que vous voulez
+        $user->type = 1; // 1 for normal user, 2 for admin
         $user->save();
             return response()->json([
                 'status_code' => 200,

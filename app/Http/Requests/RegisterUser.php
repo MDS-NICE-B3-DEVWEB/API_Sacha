@@ -33,7 +33,7 @@ class RegisterUser extends FormRequest
                     'nom' => 'required|string|max:255',
                     'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:12|confirmed',
             
                   ];
                   if ($validator->fails())
@@ -68,7 +68,7 @@ class RegisterUser extends FormRequest
             'email.required'=>'Adresse mail obligatoire',
             'email.unique'=>'Adresse mail déjà utilisée',
             'password.required'=>'Mot de passe obligatoire',
-            'password.min'=>'Mot de passe doit contenir au moins 6 caractères',
+            'password.min'=>'Mot de passe doit contenir au moins 12 caractères',
             'password.confirmed'=>'Mot de passe non confirmé',
         ];
     }

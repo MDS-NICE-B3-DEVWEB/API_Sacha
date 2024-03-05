@@ -138,7 +138,7 @@ Modifie un utilisateur:
 1. Clonez le projet à parti de github.
 
    ```bash
-      git clone https://github.com/MDS-NICE-B3-DEVWEB/API_FRANCK
+      git clone https://github.com/MDS-NICE-B3-DEVWEB/API_Sacha.git
     ```
 
 3. Créer une base de données
