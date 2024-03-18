@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Validator; // Add this line
+use Illuminate\Contracts\Validation\Validator; // Make sure to import this at the top of your file
 
 class UpdateUserRequest extends FormRequest
 {
