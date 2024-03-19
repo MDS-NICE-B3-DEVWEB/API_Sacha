@@ -1,0 +1,75 @@
+version: "3"
+
+services:
+
+
+  api-tria:
+    build: .
+    networks:
+      tria:
+        ipv4_address: 110.100.0.10
+    container_name:  api-tria
+    ports:
+      - "80:8000"
+    hostname: api-tria
+    restart:  always
+    volumes:
+      - ./app:/app
+      - ./.env:/app/.env
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=proxy"
+    #   - "traefik.http.routers.api-tria-secure.entrypoints=websecure"
+    #   - "traefik.http.routers.api-tria-secure.rule=Host(`api-tria.shenron.dev`)"
+    #   - "traefik.http.routers.api-tria-secure.service=api-tria"
+    #   - "traefik.http.services.api-tria.loadbalancer.server.port=8000"
+
+
+  -tria-db:
+    image: mariadb:10.3.9
+    container_name: tria-db
+    hostname: tria-db
+    networks:
+      tria:
+        ipv4_address: 110.100.0.20
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_HOST=%
+
+  phpmyadmin-sacha:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-sacha
+    hostname: phpmyadmin-sacha
+    ports:
+      - "8080:80"
+    networks:
+      tria:
+        ipv4_address: 110.100.0.30
+    env_file:
+      - .env
+    restart: always
+    environment:
+      - PMA_HOST=${DB_HOST}
+      - PMA_PORT=${DB_PORT}
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=proxy"
+    #   - "traefik.http.routers.sacha-phpmyadmin-secure.entrypoints=websecure"
+    #   - "traefik.http.routers.sacha-phpmyadmin-secure.rule=Host(`sacha-phpmyadmin.shenron.dev`)"
+    #   - "traefik.http.routers.sacha-phpmyadmin-secure.service=sacha-phpmyadmin"
+    #   - "traefik.http.services.sacha-phpmyadmin.loadbalancer.server.port=80"
+
+
+networks:
+  tria:
+    ipam:
+      config:
+        - subnet: 110.100.0.0/16
