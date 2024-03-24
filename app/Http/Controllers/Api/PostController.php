@@ -9,6 +9,7 @@ use App\Http\Api\Auth\ApiAuthController;
 use App\Models\Theatre;
 use Exception;
 use App\Models\Post;
+use App\Models\Utilisateurs;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -39,6 +40,10 @@ class PostController extends Controller
     public function store(CreatePostRequest $request)
     {
         try{
+            $user = Utilisateurs::find($request->user_id);
+    if (!$user) {
+        return response()->json(['error' => 'User not found'], 404);
+    }
             $theatre= new Theatre();
             $theatre->titre = $request->titre;
             $theatre->description = $request->description;
