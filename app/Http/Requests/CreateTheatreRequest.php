@@ -6,12 +6,13 @@ use App\Models\Utilisateurs;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Requests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 // Remove the line below
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-class RegisterUser extends FormRequest
+
+class CreateTheatreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,26 +31,13 @@ class RegisterUser extends FormRequest
     {
 
                 return [
-                    'nom' => 'required|string|max:255',
-                    'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'ville' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:12|confirmed',
+            'SIRET' => 'required|string',
             
                   ];
-                $validator = $this->getValidatorInstance();
-                if ($validator->fails())
-                  {
-                      return response(['errors'=>$validator->errors()->all()], 422);
-                  }
-                if ($validator->fails()) {
-                    $request = $this->all();
-                    $request['password'] = Hash::make($request['password']);
-                }
-                  $request['remember_token'] = Str::random(10);
-                $user = Utilisateurs::create($request->toArray());
-                  $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                  $response = ['token' => $token];
-                  return response($response, 200);
     }
     
             
@@ -57,7 +45,6 @@ class RegisterUser extends FormRequest
     {
         throw new HttpResponseException(response()->json([
         'success'=>false,
-        'status_code'=>422, 
         'errors'=>true,
         'message'=>'Erreur de validation',
         'errorsList'=>$validator->errors()]));
@@ -66,12 +53,11 @@ class RegisterUser extends FormRequest
     {
         return[
             'nom.required'=>'Le nom est obligatoire',
-            'prenom.required'=>'Le prenom est obligatoire',
+            'ville.required'=>'La ville est obligatoire',
+            'adresse.required'=>'L\'adresse est obligatoire',
+            'SIRET.required'=>'Le SIRET est obligatoire',
             'email.required'=>'Adresse mail obligatoire',
             'email.unique'=>'Adresse mail déjà utilisée',
-            'password.required'=>'Mot de passe obligatoire',
-            'password.min'=>'Mot de passe doit contenir au moins 12 caractères',
-            'password.confirmed'=>'Mot de passe non confirmé',
         ];
     }
 }

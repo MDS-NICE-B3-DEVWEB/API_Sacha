@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\CreateTheatreRequest;
 use App\Http\Requests\EditPostRequest;
 use App\Models\Location; // Utilisez Location ici
 use Exception;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class LocationController extends Controller
 {
     public function index(Request $request)
     {
@@ -33,7 +33,7 @@ class PostController extends Controller
         }
         catch(Exception $e){return response()->json($e);}
     }
-    public function store(CreatePostRequest $request)
+    public function store(CreateTheatreRequest $request)
     {
         try{
             $location= new Location();
@@ -45,7 +45,7 @@ class PostController extends Controller
             $location->save();
     return response()->json([
         'status_code' => 200,
-    'status_message'=>'La pièce a été ajouté',
+    'status_message'=>'La théâtre a été ajouté',
     'data'=>$location]);
         }
         catch(Exception $e){return response()->json($e);}
