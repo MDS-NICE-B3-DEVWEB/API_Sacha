@@ -28,7 +28,7 @@ Route::post('/login',[UserController::class,'login']);
 Route::post('/register', [UserController::class, 'register']);
 Route::post('/logout', [UserController::class, 'logout']);
 
-
+Route::post('theatre/create',[PostController::class,'store']);
 Route::get('theatre', [PostController::class,'index']);
 Route::middleware('auth:sanctum')->group(function(){
     //récupérer la liste des pièces de théâtre
@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/user', [UserController::class, 'user']);
     //ajouter une pièce de théâtre /POST /PUT /PATCH
     Route::post('location/create', [LocationController::class, 'store']);
-    Route::post('theatre/create',[PostController::class,'store']);
+    
     //modifier une pièce de théâtre /PUT /PATCH
     Route::put('theatre/edit/{theatre}', [PostController::class,'update']);
     //supprimer une pièce de théâtre /DELETE
