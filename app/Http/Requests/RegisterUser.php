@@ -32,26 +32,14 @@ class RegisterUser extends FormRequest
                 return [
                     'nom' => 'required|string|max:255',
                     'prenom' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+                    'email' => 'required|string|email|max:255|unique:utilisateurs',
             'password' => 'required|string|min:12|confirmed',
             
                   ];
-                $validator = $this->getValidatorInstance();
-                if ($validator->fails())
-                  {
-                      return response(['errors'=>$validator->errors()->all()], 422);
-                  }
-                if ($validator->fails()) {
-                    $request = $this->all();
-                    $request['password'] = Hash::make($request['password']);
+                  
                 }
-                  $request['remember_token'] = Str::random(10);
-                $user = Utilisateurs::create($request->toArray());
-                  $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                  $response = ['token' => $token];
-                  return response($response, 200);
-    }
-    
+
+// Other code...
             
     public function failedValidation(Validator $validator)
     {

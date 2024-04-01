@@ -14,6 +14,7 @@ use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\EditPostRequest;
 use Laravel\Sanctum\createToken as SanctumCreateToken;
 
+
 use Exception;
 class UserController extends Controller
 {
