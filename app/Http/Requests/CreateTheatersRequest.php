@@ -7,7 +7,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Foundation\Http\FormRequest;
 
 
-class CreatePostRequest extends FormRequest
+class CreateTheatersRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,10 @@ class CreatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre' => 'required',
+            'name' => 'required',
+            'adress' => 'required',
+            'SIRET' => ['required', 'digits:14'],
+
         ];
     }
     public function failedValidation(Validator $validator)
@@ -39,7 +42,9 @@ class CreatePostRequest extends FormRequest
     }
     public function messages(){
         return [
-            'titre.required' => 'Le titre est obligatoire',
+            'name.required' => 'Le nom du théâtre est obligatoire',
+            'adress.required' => 'Une adresse est obligatoire',
+            'SIRET.required' => 'Le SIRET est obligatoire',
         ];
     } 
 }

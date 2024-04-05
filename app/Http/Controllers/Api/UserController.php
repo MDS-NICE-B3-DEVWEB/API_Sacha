@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Utilisateurs;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\RegisterUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\LogUserRequest;
-use App\Http\Requests\DeleteUserRequest;    
-use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\DeleteUserRequest; 
 use App\Http\Requests\EditPostRequest;
-use Laravel\Sanctum\createToken as SanctumCreateToken;
+use Laravel\Sanctum\createToken;
 
 
 use Exception;
@@ -21,17 +21,17 @@ class UserController extends Controller
     public function register(RegisterUser $request)
     {
         try{
-            $user = new Utilisateurs(); // Utilisez Utilisateurs ici
-            $user->nom = $request->nom;
-            $user->prenom = $request->prenom;
+            $user = new User(); // Utilisez Utilisateurs ici
+            $user->name = $request->name;
+            $user->first_name = $request->first_name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-            $user->type = 1; // Remplacez 'default_value' par la valeur que vous voulez
             $user->save();
             return response()->json([
                 'status_code' => 200,
                 'status_message'=>'Utilisateur enregistré',
-                'user'=>$user
+                'user'=>$user,
+                
             ]);
         }
         catch(\Exception $e){
@@ -41,48 +41,63 @@ class UserController extends Controller
     }
 
 
-    public function user(Request $request){
-        return response()->json($request->user());
-    }
     public function login(LogUserRequest $request){
-if(auth()->attempt($request->only('email','password'))){
-    $user=auth()->user();
-    $token = $user->createToken('authToken')->plainTextToken;
-    return response()->json([
-        'status_code' => 200,
-        'status_message'=>'Utilisateur connecté',
-        'utilisateurs'=>$user,
-        'token'=>$token
-    ]);}
-    else{
-        //si les les informations de connexion sont incorrectes
-        return response()->json([
-        'status_code' => 403 ,
-        'status_message'=>'Informations de connexion incorrectes',
-        ]);
-    } 
+        if(auth()->attempt($request->only('email','password'))){
+            $user=auth()->user();
+            $token = $user->createToken('authToken')->plainTextToken;
+            return response()->json([
+                'status_code' => 200,
+                'status_message'=>'Utilisateur connecté',
+                'users'=>$user,
+                
+                'token'=>$token
+            ]);
+        } else {
+            //si les les informations de connexion sont incorrectes
+            return response()->json([
+                'status_code' => 403 ,
+                'status_message'=>'Informations de connexion incorrectes',
+            ]);
+        } 
     }
+    
     public function logout(Request $request){
         try{
-            if ($request->utilisateurs()) {
+            if ($request->user()) {
                 // Révoquez le token
-                $request->utilisateurs()->currentAccessToken()->delete();
+                $request->user()->currentAccessToken()->delete();
             }
             return response()->json([
                 'status_code' => 200,
-            'status_message'=>'Utilisateur déconnecté',
+                'status_message'=>'Utilisateur déconnecté',
             ]);
         }
         catch(Exception $e){
             return response()->json($e);
         }
-        
     }
-
-    public function destroy(Request $request)
+        
+    public function index()
     {
         try {
-            $user = Utilisateurs::findOrFail($request->id);
+            $users = User::all();
+            return response()->json([
+                'status_code' => 200,
+                'status_message'=>'Liste des utilisateurs',
+                'data'=>$users
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'Une erreur est survenue lors de la récupération des utilisateurs : ' . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function destroy(DeleteUserRequest $request)
+    {
+        try {
+            $user = User::findOrFail($request->id);
             if($user->id != auth()->user()->id){
                 return response()->json([
                     'status_code' => 403,
@@ -103,7 +118,7 @@ if(auth()->attempt($request->only('email','password'))){
     }
 
 
-public function update(Request $request, Utilisateurs $user)
+public function update(Request $request, User $user)
 {
     try {
         if($user->id != auth()->user()->id){
@@ -113,8 +128,8 @@ public function update(Request $request, Utilisateurs $user)
             ]);
         }
 
-        $user->nom = $request->get('nom', $user->nom);
-        $user->prenom = $request->get('prenom', $user->prenom);
+        $user->nom = $request->get('name', $user->name);
+        $user->prenom = $request->get('first_name', $user->first_name);
         $user->email = $request->get('email', $user->email);
         // Add more fields here as needed
 

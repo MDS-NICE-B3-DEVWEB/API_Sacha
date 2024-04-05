@@ -9,6 +9,6 @@ class Comment extends Model
 {
     public function commenter()
 {
-    return $this->belongsTo(Comments::class);
+    return $this->belongsTo(User::class);
 }
 }

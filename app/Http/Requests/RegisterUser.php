@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Utilisateurs;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
@@ -30,10 +30,12 @@ class RegisterUser extends FormRequest
     {
 
                 return [
-                    'nom' => 'required|string|max:255',
-                    'prenom' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255|unique:utilisateurs',
-            'password' => 'required|string|min:12|confirmed',
+                    
+                    'name' => 'required|string|max:255',
+                    'first_name' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:12',
+            'password_confirmation' => 'required|string|min:12',
             
                   ];
                   
@@ -53,8 +55,8 @@ class RegisterUser extends FormRequest
     public function messages()
     {
         return[
-            'nom.required'=>'Le nom est obligatoire',
-            'prenom.required'=>'Le prenom est obligatoire',
+            'name.required'=>'Le nom est obligatoire',
+            'first_name.required'=>'Le prenom est obligatoire',
             'email.required'=>'Adresse mail obligatoire',
             'email.unique'=>'Adresse mail déjà utilisée',
             'password.required'=>'Mot de passe obligatoire',

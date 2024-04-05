@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\CreateThemeRequest;
 use App\Http\Requests\EditPostRequest; // Import the missing class
 use App\Http\Api\Auth\ApiAuthController;
-use App\Models\Theatre;
+use App\Models\Theme;
 use Exception;
 use App\Models\Post;
-use App\Models\Utilisateurs;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class ThemeController extends Controller
 {
-    public function index(Request $request)
+    public function index(CreateThemeRequest $request)
     {
         
         try{
-            $query=Theatre::query();
+            $query=Theme::query();
         $perPage = 2;
         $page=$request->input('page',1);
         $search=$request->input('search');
@@ -37,62 +36,57 @@ class PostController extends Controller
         }
         catch(Exception $e){return response()->json($e);}
     }
-    public function store(CreatePostRequest $request)
+    public function store(CreateThemeRequest $request)
     {
         try{
-            $user = Utilisateurs::find($request->user_id);
-    if (!$user) {
-        return response()->json(['error' => 'User not found'], 404);
-    }
-            $theatre= new Theatre();
-            $theatre->titre = $request->titre;
-            $theatre->description = $request->description;
-            $theatre->user_id = auth()->user()->id;
-            $theatre->save();
-    return response()->json([
-        'status_code' => 200,
-    'status_message'=>'La pièce a été ajouté',
-    'data'=>$theatre]);
+            $theme= new Theme();
+            $theme->name = $request->name;   
+            $theme->save();
+            return response()->json([
+                'status_code' => 200,
+                'status_message'=>'Le post a été modifié',
+                'data'=>$theme]);
         }
         catch(Exception $e){return response()->json($e);}
        
     }
-    public function update(EditPostRequest $request, Theatre $theatre){
+    public function update(CreateThemeRequest $request, Theme $theme){
         
 try{
-    $theatre->titre = $request->titre;
-    $theatre->description = $request->description;
-    if($theatre->user_id == auth()->user()->id){
-        $theatre->save();}
+    $theme->name = $request->name;
+            $theme->adress = $request->adress;
+            $theme->SIRET = $request->SIRET;
+    if($theme->user_id == auth()->user()->id){
+        $theme->save();}
     else{
         return response()->json([
             'status_code' => 403,
-        'status_message'=>'Vous n\'êtes pas autorisé à modifier ce post',
+        'status_message'=>'Vous n\'êtes pas autorisé à modifier ce théâtre',
         ]);
     }
-    $theatre->save();
+    $theme->save();
     return response()->json([
         'status_code' => 200,
     'status_message'=>'Le post a été modifié',
-    'data'=>$theatre]);
+    'data'=>$theme]);
 }
 catch(Exception $e){return response()->json($e);}
     }
-    public function destroy(Theatre $theatre){
+    public function destroy(Theme $theme){
         try{
-            if($theatre->user_id == auth()->user()->id){
-                $theatre->delete();}
+            if($theme->user_id == auth()->user()->id){
+                $theme->delete();}
             else{
                 return response()->json([
                     'status_code' => 403,
                 'status_message'=>'Vous n\'êtes pas autorisé à supprimer cette pièce de théâtre',
                 ]);
             }
-            $theatre->delete();
+            $theme->delete();
             return response()->json([
                 'status_code' => 200,
             'status_message'=>'La pièce a été supprimé',
-            'data'=>$theatre]);
+            'data'=>$theme]);
         }
         catch(Exception $e){
             // handle exception

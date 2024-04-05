@@ -17,8 +17,7 @@ class CreateCommentRequest extends FormRequest
     {
         return [
             'note' => 'required|integer|min:0|max:5',
-            'commentaire' => 'required',
-            'theatre_nom.required' => 'required',
+            'comment' => 'required',
             
         ];
     }
@@ -35,8 +34,7 @@ class CreateCommentRequest extends FormRequest
     public function messages(){
         return [
             'note.required' => 'Note obligatoire',
-            'commentaire.required' => 'Commentaire obligatoire',
-            'theatre_nom.required' => 'Titre obligatoire',
+            'comment.required' => 'Commentaire obligatoire',
         ];
     } 
 }

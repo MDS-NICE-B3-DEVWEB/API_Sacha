@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-class EditPostRequest extends FormRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+
+class CreateThemeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +25,7 @@ class EditPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'titre' => 'required',
+            'name' => 'required',
         ];
     }
     public function failedValidation(Validator $validator)
@@ -37,7 +39,7 @@ class EditPostRequest extends FormRequest
     }
     public function messages(){
         return [
-            'titre.required' => 'Le titre est obligatoire',
+            'name.required' => 'Le thème est obligatoire',
         ];
     } 
 }

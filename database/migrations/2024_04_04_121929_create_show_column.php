@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('utilisateurs', function (Blueprint $table) {
+        Schema::create('show', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('email');
-            $table->string('password');
-            $table->integer('type');
-            $table->string('remember_token')->nullable();
+            $table->string('title');
+            $table->longtext('description')->nullable();
+            $table->decimal('price', 8, 2);
+            $table->foreignId('theater_id')->constrained('theaters');
+            $table->foreignId('theme_id')->constrained('theme');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('utilisateurs');
+        Schema::dropIfExists('show');
     }
 };
