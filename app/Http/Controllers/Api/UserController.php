@@ -10,81 +10,89 @@ use App\Http\Requests\RegisterUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\LogUserRequest;
-use App\Http\Requests\DeleteUserRequest; 
+use App\Http\Requests\DeleteUserRequest;
 use App\Http\Requests\EditPostRequest;
 use Laravel\Sanctum\createToken;
 
 
 use Exception;
+
 class UserController extends Controller
 {
+
     public function register(RegisterUser $request)
     {
-        try{
-            $user = new User(); // Utilisez Utilisateurs ici
+        try {
+            $user = new User();
             $user->name = $request->name;
             $user->first_name = $request->first_name;
             $user->email = $request->email;
-            $user->password = Hash::make($request->password);
+            $user->password = bcrypt($request->password);
             $user->save();
-            return response()->json([
-                'status_code' => 200,
-                'status_message'=>'Utilisateur enregistré',
-                'user'=>$user,
-                
-            ]);
-        }
-        catch(\Exception $e){
-            return response()->json($e);
-        }
-        
-    }
-
-
-    public function login(LogUserRequest $request){
-        if(auth()->attempt($request->only('email','password'))){
-            $user=auth()->user();
             $token = $user->createToken('authToken')->plainTextToken;
             return response()->json([
                 'status_code' => 200,
-                'status_message'=>'Utilisateur connecté',
-                'users'=>$user,
-                
-                'token'=>$token
+                'status_message' => 'Utilisateur enregistré',
+                'users' => $user,
+                'token' => $token
+            ]);
+        } catch (Exception $e) {
+            //si l'enregistrement échoue
+            return response()->json([
+                'status_code' => 400,
+                'status_message' => 'L\'enregistrement a échoué',
+                'error' => $e->getMessage()
+            ], 400);
+        }
+    }
+
+
+
+    public function login(LogUserRequest $request)
+    {
+        if (auth()->attempt($request->only('email', 'password'))) {
+            $user = auth()->user();
+            $token = $user->createToken('authToken')->plainTextToken;
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Utilisateur connecté',
+                'users' => $user,
+
+                'token' => $token
             ]);
         } else {
             //si les les informations de connexion sont incorrectes
             return response()->json([
-                'status_code' => 403 ,
-                'status_message'=>'Informations de connexion incorrectes',
+                'status_code' => 403,
+                'status_message' => 'Informations de connexion incorrectes',
             ]);
-        } 
+        }
     }
-    
-    public function logout(Request $request){
-        try{
+
+    public function logout(Request $request)
+    {
+        try {
             if ($request->user()) {
                 // Révoquez le token
                 $request->user()->currentAccessToken()->delete();
             }
             return response()->json([
                 'status_code' => 200,
-                'status_message'=>'Utilisateur déconnecté',
+                'status_message' => 'Utilisateur déconnecté',
             ]);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json($e);
         }
     }
-        
+
     public function index()
     {
         try {
             $users = User::all();
             return response()->json([
                 'status_code' => 200,
-                'status_message'=>'Liste des utilisateurs',
-                'data'=>$users
+                'status_message' => 'Liste des utilisateurs',
+                'data' => $users
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -93,18 +101,36 @@ class UserController extends Controller
             ]);
         }
     }
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        if ($user) {
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Utilisateur trouvé',
+                'user' => $user
+            ]);
+        } else {
+            return response()->json([
+                'status_code' => 404,
+                'status_message' => 'Utilisateur non trouvé'
+            ], 404);
+        }
+    }
 
     public function destroy(DeleteUserRequest $request)
     {
         try {
             $user = User::findOrFail($request->id);
-            if($user->id != auth()->user()->id){
+            if ($user->id != auth()->user()->id) {
                 return response()->json([
                     'status_code' => 403,
-                    'status_message'=>'Vous n\'êtes pas autorisé à supprimer cet utilisateur',
-                ]);}
+                    'status_message' => 'Vous n\'êtes pas autorisé à supprimer cet utilisateur',
+                ]);
+            }
             $user->delete();
-    
+
             return response()->json([
                 'status_code' => 200,
                 'status_message' => 'L\'utilisateur a été supprimé',
@@ -118,34 +144,34 @@ class UserController extends Controller
     }
 
 
-public function update(Request $request, User $user)
-{
-    try {
-        if($user->id != auth()->user()->id){
+    public function update(Request $request, User $user)
+    {
+        try {
+            if ($user->id != auth()->user()->id) {
+                return response()->json([
+                    'status_code' => 403,
+                    'status_message' => 'Vous n\'êtes pas autorisé à modifier cet utilisateur',
+                ]);
+            }
+
+            $user->nom = $request->get('name', $user->name);
+            $user->prenom = $request->get('first_name', $user->first_name);
+            $user->email = $request->get('email', $user->email);
+            // Add more fields here as needed
+
+            $user->save();
+
             return response()->json([
-                'status_code' => 403,
-                'status_message'=>'Vous n\'êtes pas autorisé à modifier cet utilisateur',
+                'status_code' => 200,
+                'status_message' => 'L\'utilisateur a été modifié',
+                'data' => $user
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status_code' => 500,
+                'status_message' => 'Une erreur est survenue lors de la modification de l\'utilisateur : ' . $e->getMessage(),
             ]);
         }
-
-        $user->nom = $request->get('name', $user->name);
-        $user->prenom = $request->get('first_name', $user->first_name);
-        $user->email = $request->get('email', $user->email);
-        // Add more fields here as needed
-
-        $user->save();
-
-        return response()->json([
-            'status_code' => 200,
-            'status_message'=>'L\'utilisateur a été modifié',
-            'data'=>$user
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status_code' => 500,
-            'status_message' => 'Une erreur est survenue lors de la modification de l\'utilisateur : ' . $e->getMessage(),
-        ]);
     }
-}
 }
         // handle exception

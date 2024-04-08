@@ -32,18 +32,19 @@ class LogUserRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-        'success'=>false,
-        'error'=>true,
-        'message'=>'Erreur de validation',
-        'errorList'=> $validator->errors()
+            'success' => false,
+            'error' => true,
+            'message' => 'Erreur de validation',
+            'errorList' => $validator->errors()
         ]));
     }
-    public function messages(){
+    public function messages()
+    {
         return [
             'email.required' => 'Email obligatoire',
             'email.email' => 'Email invalide',
             'email.exists' => 'Email inexistant',
             'password.required' => 'Mot de passe obligatoire',
         ];
-    } 
+    }
 }

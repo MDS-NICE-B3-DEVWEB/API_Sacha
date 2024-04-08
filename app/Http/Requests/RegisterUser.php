@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 // Remove the line below
 // use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+
 class RegisterUser extends FormRequest
 {
     /**
@@ -29,39 +30,39 @@ class RegisterUser extends FormRequest
     public function rules(): array
     {
 
-                return [
-                    
-                    'name' => 'required|string|max:255',
-                    'first_name' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255|unique:users',
+        return [
+
+            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:12',
             'password_confirmation' => 'required|string|min:12',
-            
-                  ];
-                  
-                }
 
-// Other code...
-            
+        ];
+    }
+
+    // Other code...
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-        'success'=>false,
-        'status_code'=>422, 
-        'errors'=>true,
-        'message'=>'Erreur de validation',
-        'errorsList'=>$validator->errors()]));
+            'success' => false,
+            'status_code' => 422,
+            'errors' => true,
+            'message' => 'Erreur de validation',
+            'errorsList' => $validator->errors()
+        ]));
     }
     public function messages()
     {
-        return[
-            'name.required'=>'Le nom est obligatoire',
-            'first_name.required'=>'Le prenom est obligatoire',
-            'email.required'=>'Adresse mail obligatoire',
-            'email.unique'=>'Adresse mail déjà utilisée',
-            'password.required'=>'Mot de passe obligatoire',
-            'password.min'=>'Mot de passe doit contenir au moins 12 caractères',
-            'password.confirmed'=>'Mot de passe non confirmé',
+        return [
+            'name.required' => 'Le nom est obligatoire',
+            'first_name.required' => 'Le prenom est obligatoire',
+            'email.required' => 'Adresse mail obligatoire',
+            'email.unique' => 'Adresse mail déjà utilisée',
+            'password.required' => 'Mot de passe obligatoire',
+            'password.min' => 'Mot de passe doit contenir au moins 12 caractères',
+            'password.confirmed' => 'Mot de passe non confirmé',
         ];
     }
 }

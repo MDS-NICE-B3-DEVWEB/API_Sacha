@@ -34,17 +34,18 @@ class CreateTheatersRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-        'success'=>false,
-        'error'=>true,
-        'message'=>'Erreur de validation',
-        'errorList'=> $validator->errors()
+            'success' => false,
+            'error' => true,
+            'message' => 'Erreur de validation',
+            'errorList' => $validator->errors()
         ]));
     }
-    public function messages(){
+    public function messages()
+    {
         return [
             'name.required' => 'Le nom du théâtre est obligatoire',
             'adress.required' => 'Une adresse est obligatoire',
             'SIRET.required' => 'Le SIRET est obligatoire',
         ];
-    } 
+    }
 }

@@ -34,10 +34,11 @@ class UpdateUserRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-        'success'=>false,
-        'status_code'=>422, 
-        'errors'=>true,
-        'message'=>'Erreur de validation',
-        'errorsList'=>$validator->errors()]));
+            'success' => false,
+            'status_code' => 422,
+            'errors' => true,
+            'message' => 'Erreur de validation',
+            'errorsList' => $validator->errors()
+        ]));
     }
 }

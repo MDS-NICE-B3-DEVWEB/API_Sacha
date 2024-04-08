@@ -19,5 +19,4 @@ class Show extends Model
         'price',
         'theatre_id',
     ];
-
 }

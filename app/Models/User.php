@@ -17,8 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    
-    protected $table = 'users'; 
+
+    protected $table = 'users';
     protected $fillable = [
         'name',
         'first_name',
@@ -46,7 +46,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     public function sendPasswordResetNotification($token)
-{
-    $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
-}
+    {
+        $this->notify(new \App\Notifications\MailResetPasswordNotification($token));
+    }
 }
