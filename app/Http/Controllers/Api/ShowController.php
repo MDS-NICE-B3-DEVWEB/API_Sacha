@@ -18,7 +18,7 @@ class ShowController extends Controller
 
         try {
             $query = Show::query();
-            $perPage = 2;
+            $perPage = 10;
             $page = $request->input('page', 1);
             $search = $request->input('search');
             if ($search) {
