@@ -38,6 +38,23 @@ class ShowController extends Controller
             return response()->json($e);
         }
     }
+public function show($id)
+{
+    $show = Show::find($id);
+
+    if ($show) {
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'Pièce de théâtre trouvée',
+            'show' => $show
+        ]);
+    } else {
+        return response()->json([
+            'status_code' => 404,
+            'status_message' => 'Pièce de théâtre non trouvée'
+        ], 404);
+    }
+}
     public function store(CreateShowRequest $request)
     {
         try {
