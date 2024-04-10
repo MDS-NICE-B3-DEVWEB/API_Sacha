@@ -15,7 +15,6 @@ return new class extends Migration
                 $table->id();
                 $table->integer('note');
                 $table->string('content');
-                $table->foreignId('user_id')->constrained('users');
                 $table->foreignId('show_id')->constrained('show'); // Correct usage
                 $table->timestamps();
             });

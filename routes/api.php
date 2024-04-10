@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ThemeController;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Api\CommentsController;
 use App\Http\Controllers\Api\ShowController;
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('/delete/{id}', [UserController::class, 'destroy']);
     Route::put('/update/{id}', [UserController::class, 'update']);
     Route::post('theater/create',[TheatersController::class,'store']);
+    Route::post('create/comments', [CommentsController::class,'store']);
     //modifier une pièce de théâtre /PUT /PATCH
     Route::put('theatre/edit/{theatre}', [TheatersController::class,'update']);
     //supprimer une pièce de théâtre /DELETE
