@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Show extends Model
 {
     use HasFactory;
-    public function show()
+    public function Theaters()
     {
         return $this->belongsTo(Theaters::class);
+        
     }
+    
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
     protected $table = 'show';
     protected $fillable = [
         'title',

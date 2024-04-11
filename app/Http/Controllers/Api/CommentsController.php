@@ -7,6 +7,7 @@ use App\Http\Requests\CreateCommentRequest;
 use App\Http\Requests\EditPostRequest; // Import the missing class
 use App\Http\Api\Auth\ApiAuthController;
 use App\Models\Comments;
+use App\Models\Show;
 use Exception;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -38,23 +39,27 @@ class CommentsController extends Controller
             return response()->json($e);
         }
     }
-public function show($id)
-{
-    $show = Comments::find($id);
 
-    if ($show) {
-        return response()->json([
-            'status_code' => 200,
-            'status_message' => 'Pièce de théâtre trouvée',
-            'show' => $show
-        ]);
-    } else {
-        return response()->json([
-            'status_code' => 404,
-            'status_message' => 'Pièce de théâtre non trouvée'
-        ], 404);
+    public function comments($id)
+    {
+        $show = Show::find($id);
+    
+        if ($show) {
+            $comments = $show->comments; // Assurez-vous que vous avez défini une relation comments dans votre modèle Show
+    
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Commentaires trouvés',
+                'comments' => $comments
+            ]);
+        } else {
+            return response()->json([
+                'status_code' => 404,
+                'status_message' => 'Pièce de théâtre non trouvée'
+            ], 404);
+        }
     }
-}
+    
     public function store(CreateCommentRequest $request)
     {
         try {

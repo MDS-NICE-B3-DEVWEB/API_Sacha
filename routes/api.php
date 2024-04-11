@@ -35,6 +35,8 @@ Route::get('theme', [ThemeController::class,'index']);
 Route::post('create/show', [ShowController::class,'store']);
 Route::get('show', [ShowController::class,'index']);
 Route::get('/show/{id}', [ShowController::class,'show']);
+Route::get('/show/{id}/comments', [CommentsController::class,'comments']);
+
 Route::middleware('auth:sanctum')->group(function(){
     //récupérer la liste des pièces de théâtre
     Route::delete('/delete/{id}', [UserController::class, 'destroy']);
