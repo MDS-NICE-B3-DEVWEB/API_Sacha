@@ -59,7 +59,36 @@ class CommentsController extends Controller
             ], 404);
         }
     }
-    
+public function averageRating($id)
+{
+    $show = Show::find($id);
+
+    if ($show) {
+        $comments = $show->comments; // Assurez-vous que vous avez défini une relation comments dans votre modèle Show
+
+        if ($comments->isEmpty()) {
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => 'Aucun commentaire trouvé pour cette pièce de théâtre',
+                'average_rating' => null
+            ]);
+        }
+
+        $averageRating = $comments->avg('rating'); // Assurez-vous que vos commentaires ont une colonne 'rating'
+
+        return response()->json([
+            'status_code' => 200,
+            'status_message' => 'Moyenne des notes calculée',
+            'average_rating' => $averageRating
+        ]);
+    } else {
+        return response()->json([
+            'status_code' => 404,
+            'status_message' => 'Pièce de théâtre non trouvée'
+        ], 404);
+    }
+}
+
     public function store(CreateCommentRequest $request)
     {
         try {
@@ -77,31 +106,7 @@ class CommentsController extends Controller
             return response()->json($e);
         }
     }
-    public function update(Request $request, Comments $show)
-    {
-
-        try {
-            $show->title = $request->title;
-            $show->description = $request->description;
-            $show->price = $request->price;
-            if ($show->user_id == auth()->user()->id) {
-                $show->save();
-            } else {
-                return response()->json([
-                    'status_code' => 403,
-                    'status_message' => 'Vous n\'êtes pas autorisé à modifier ce théâtre',
-                ]);
-            }
-            $show->save();
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => 'Le post a été modifié',
-                'data' => $show
-            ]);
-        } catch (Exception $e) {
-            return response()->json($e);
-        }
-    }
+ 
     public function destroy(Comments $show)
     {
         try {

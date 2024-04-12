@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::put('theatre/edit/{theatre}', [TheatersController::class,'update']);
     //supprimer une pièce de théâtre /DELETE
     Route::delete('theatre/delete/{theatre}',[TheatersController::class,'destroy']);
-    
+    Route::get('/shows/{id}/average', [CommentsController::class,'averageRating']);
     Route::get('/me/{id}', [UserController::class,'show']);
     //ajouter un commentaire 
     //Route::post('/comments', [CommentController::class, 'store']);
