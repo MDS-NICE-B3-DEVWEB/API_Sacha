@@ -74,7 +74,7 @@ public function averageRating($id)
             ]);
         }
 
-        $averageRating = $comments->avg('rating'); // Assurez-vous que vos commentaires ont une colonne 'rating'
+        $averageRating = $comments->avg('note'); // Assurez-vous que vos commentaires ont une colonne 'rating'
 
         return response()->json([
             'status_code' => 200,
